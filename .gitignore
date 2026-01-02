@@ -1,0 +1,25 @@
+# OS Specific
+.DS_Store
+
+# Backend
+tracer-backend/.env
+tracer-backend/bin/
+tracer-backend/vendor/
+
+# Frontend
+tracer-frontend/.env
+tracer-frontend/.env.local
+tracer-frontend/.env.development.local
+tracer-frontend/.env.test.local
+tracer-frontend/.env.production.local
+tracer-frontend/node_modules/
+tracer-frontend/.next/
+tracer-frontend/out/
+tracer-frontend/build/
+tracer-frontend/dist/
+tracer-frontend/.vercel/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
