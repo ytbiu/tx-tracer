@@ -72,3 +72,15 @@ For more details, see [tracer-frontend/README.md](./tracer-frontend/README.md).
 - **Trace Visualization**: Visualize the call stack and see exactly where and why a transaction reverted.
 - **Error Analysis**: Automatically extracts revert reasons and decoded error data.
 - **ABI Tools**: Built-in utilities to encode and decode ABI parameters.
+
+## Interface Preview
+
+The frontend interface is designed for simplicity and efficiency:
+
+![Dashboard Preview](docs/images/preview.png)
+
+### Key Components:
+
+- **Configuration Panel**: Set your RPC URL and transaction parameters (From, To, Value, Data).
+- **Trace View**: Visual representation of the transaction execution flow.
+- **ABI Tool**: Helper utility for encoding and decoding contract data.
