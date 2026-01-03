@@ -23,9 +23,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const authString = Buffer.from(`${authUser}:${authPass}`).toString(
-      "base64"
-    );
+    const authString = Buffer.from(
+      `${authUser.trim()}:${authPass.trim()}`
+    ).toString("base64");
 
     const baseUrl = API_BASE_URL.replace(/\/$/, "");
     const res = await fetch(`${baseUrl}/decode`, {

@@ -66,9 +66,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const authString = Buffer.from(`${authUser}:${authPass}`).toString(
-      "base64"
-    );
+    const authString = Buffer.from(
+      `${authUser.trim()}:${authPass.trim()}`
+    ).toString("base64");
 
     const res = await fetch(backendUrl, {
       method: "POST",
