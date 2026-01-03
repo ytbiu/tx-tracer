@@ -1,12 +1,23 @@
 import fs from "fs";
 import path from "path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR =
+  process.env.NODE_ENV === "production"
+    ? "/tmp/data"
+    : path.join(process.cwd(), "data");
 const USAGE_FILE = path.join(DATA_DIR, "usage.json");
 
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+function ensureDataDir() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch (error) {
+    console.warn(
+      "Failed to create data directory, usage limits may not persist:",
+      error
+    );
+  }
 }
 
 interface UserUsage {
@@ -25,19 +36,21 @@ function getTodayDate(): string {
 }
 
 function readUsageData(): UsageData {
-  if (!fs.existsSync(USAGE_FILE)) {
-    return {};
-  }
   try {
+    ensureDataDir();
+    if (!fs.existsSync(USAGE_FILE)) {
+      return {};
+    }
     const data = fs.readFileSync(USAGE_FILE, "utf-8");
     return JSON.parse(data);
   } catch (error) {
-    console.error("Error reading usage file:", error);
+    console.warn("Error reading usage file (limits may be ignored):", error);
     return {};
   }
 }
 
 function writeUsageData(data: UsageData): void {
+  ensureDataDir();
   try {
     fs.writeFileSync(USAGE_FILE, JSON.stringify(data, null, 2));
   } catch (error) {
