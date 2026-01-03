@@ -38,6 +38,13 @@ func main() {
 		c.Next()
 	})
 
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+			"service": "tracer-backend",
+		})
+	})
+
 	r.POST("/debug", handler.HandleDebug)
 	r.POST("/decode", handler.HandleDecode)
 	r.POST("/encode", handler.HandleEncode)
