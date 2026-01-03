@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export const api = {
   decode: async (input: string) => {
-    const res = await fetch(`${API_BASE_URL}/decode`, {
+    const res = await fetch(`/api/trace/decode`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ input }),
@@ -13,7 +13,7 @@ export const api = {
   },
 
   encode: async (signature: string, args: string[]) => {
-    const res = await fetch(`${API_BASE_URL}/encode`, {
+    const res = await fetch(`/api/trace/encode`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ signature, args }),

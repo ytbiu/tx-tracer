@@ -5,6 +5,12 @@ import { NextResponse } from "next/server";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
+export const dynamic = "force-dynamic";
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200 });
+}
+
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
 
