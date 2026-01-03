@@ -98,8 +98,9 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error("Error forwarding to backend:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: `Failed to connect to backend server: ${errorMessage}` },
       { status: 500 }
     );
   }
