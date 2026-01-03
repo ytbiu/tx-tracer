@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Header } from "../components/Header";
 import { InputForm } from "../components/InputForm";
 import { ABITool } from "../components/ABITool";
@@ -9,12 +10,17 @@ import { api } from "../services/api";
 import { DebugResponse, DecodedModel, DebugPayload } from "../types";
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  // Removed invite code auth logic
+
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<DebugResponse | null>(null);
 
   // Form State
   const [chainType, setChainType] = useState<"evm" | "solana">("evm");
-  const [rpcUrl, setRpcUrl] = useState("");
+  const [rpcUrl, setRpcUrl] = useState(
+    process.env.NEXT_PUBLIC_DEFAULT_RPC_URL || ""
+  );
   const [block, setBlock] = useState("latest");
   const [txFrom, setTxFrom] = useState("");
   const [txTo, setTxTo] = useState("");
@@ -26,6 +32,31 @@ export default function Home() {
   // Input Mode
   const [inputMode, setInputMode] = useState<"custom" | "hash">("custom");
   const [txHash, setTxHash] = useState("");
+
+  useEffect(() => {
+    const chain = searchParams.get("chain");
+    const tx = searchParams.get("tx") || searchParams.get("hash");
+
+    if (chain) {
+      const type = chain as "evm" | "solana";
+      setChainType(type);
+
+      // Auto-fill RPC URL based on chain type
+      if (type === "solana") {
+        setRpcUrl("https://api.mainnet-beta.solana.com");
+      } else {
+        // Default to EVM (BSC/ETH based on env)
+        setRpcUrl(
+          process.env.NEXT_PUBLIC_DEFAULT_RPC_URL || "https://rpc.ankr.com/eth"
+        );
+      }
+    }
+
+    if (tx) {
+      setTxHash(tx);
+      setInputMode("hash");
+    }
+  }, [searchParams]);
 
   // Tool State
   const [toolMode, setToolMode] = useState<"decode" | "encode">("decode");

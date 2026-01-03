@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Transaction Tracer Helper",
+  "version": "1.0",
+  "description": "Injects a Trace button into Etherscan and BscScan transaction pages",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://etherscan.io/tx/*",
+        "*://*.etherscan.io/tx/*",
+        "*://bscscan.com/tx/*",
+        "*://*.bscscan.com/tx/*",
+        "*://solscan.io/tx/*",
+        "*://*.solscan.io/tx/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
