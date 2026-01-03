@@ -1,0 +1,12 @@
+# Ignore git directory
+.git
+
+# Ignore env file
+.env
+
+# Ignore build artifacts
+main
+bin/
+
+# Ignore vendor if not using mod vendor
+vendor/
