@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
+export const dynamic = "force-dynamic";
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200 });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -17,9 +23,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const authString = Buffer.from(`${authUser}:${authPass}`).toString("base64");
+    const authString = Buffer.from(`${authUser}:${authPass}`).toString(
+      "base64"
+    );
 
-    const res = await fetch(`${API_BASE_URL}/encode`, {
+    const baseUrl = API_BASE_URL.replace(/\/$/, "");
+    const res = await fetch(`${baseUrl}/encode`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,6 +41,9 @@ export async function POST(request: Request) {
     return NextResponse.json(data, { status: res.status });
   } catch (error) {
     console.error("Encode proxy error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

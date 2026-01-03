@@ -52,7 +52,8 @@ export async function POST(request: Request) {
       }
     }
 
-    const backendUrl = `${API_BASE_URL}/debug${block ? `?block=${block}` : ""}`;
+    const baseUrl = API_BASE_URL.replace(/\/$/, "");
+    const backendUrl = `${baseUrl}/debug${block ? `?block=${block}` : ""}`;
 
     const authUser = process.env.BASIC_AUTH_USER;
     const authPass = process.env.BASIC_AUTH_PASS;
