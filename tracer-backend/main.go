@@ -67,13 +67,15 @@ func main() {
 	})
 
 	// Public routes (no auth required)
-	r.POST("/decode", handler.HandleDecode)
-	r.POST("/encode", handler.HandleEncode)
+	// r.POST("/decode", handler.HandleDecode)
+	// r.POST("/encode", handler.HandleEncode)
 
 	// Protect sensitive routes with Basic Auth
 	authorized := r.Group("/", auth)
 	{
 		authorized.POST("/debug", handler.HandleDebug)
+		authorized.POST("/decode", handler.HandleDecode)
+		authorized.POST("/encode", handler.HandleEncode)
 	}
 
 	fmt.Printf("Starting Debug Server on :%s...\n", *port)
