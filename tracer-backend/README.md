@@ -17,13 +17,24 @@ The service requires an Ethereum RPC node supporting `debug_traceCall` or `debug
 
 ### Environment Variables
 
-You can set the default RPC URL using the `RPC_URL` environment variable:
+You can configure the service using the following environment variables:
+
+| Variable          | Description                           | Default             |
+| ----------------- | ------------------------------------- | ------------------- |
+| `BSC_RPC_URL`     | Default RPC URL for BSC (Chain ID 56) | -                   |
+| `BASIC_AUTH_USER` | Username for Basic Auth               | `admin`             |
+| `BASIC_AUTH_PASS` | Password for Basic Auth               | `tracer_admin_2026` |
+| `PORT`            | Server port                           | `8080`              |
 
 ```bash
-export RPC_URL="https://your-rpc-node"
+export BSC_RPC_URL="https://your-bsc-rpc-node"
+export BASIC_AUTH_USER="admin"
+export BASIC_AUTH_PASS="your_secure_password"
 ```
 
-If `RPC_URL` is not set in the environment, the service will look for it in the request payload or default to an internal fallback (if configured).
+If `BSC_RPC_URL` is not set in the environment, the service will look for `rpc_url` in the request payload.
+
+> **Note**: The `/debug` endpoint is protected by Basic Auth. The `/decode` and `/encode` endpoints are public.
 
 ## Usage
 
@@ -34,14 +45,14 @@ You can run the tool directly without starting a server.
 **Option A: Read from file**
 
 ```bash
-cd debug-backend
+cd tracer-backend
 ./run_debug.sh err.json 73760000
 ```
 
 **Option B: Pass JSON string directly**
 
 ```bash
-cd debug-backend
+cd tracer-backend
 # Note: Use single quotes for the JSON string to avoid shell expansion issues
 ./run_debug.sh '{"data":{"from":"0x...", "to":"0x...", "data":"0x..."}}' 73760000
 ```
@@ -54,18 +65,19 @@ cd debug-backend
 Start the HTTP server:
 
 ```bash
-cd debug-backend
+cd tracer-backend
 go run main.go --port 8080
 ```
 
 #### Send Debug Request
 
-**Endpoint:** `POST /debug`
+**Endpoint:** `POST /debug` (Protected by Basic Auth)
 
 **Option A: Pass parameters via JSON Body (no file needed)**
 
 ```bash
-curl -X POST -H "Content-Type: application/json" \
+curl -X POST -u "admin:your_secure_password" \
+     -H "Content-Type: application/json" \
      -d '{"data":{"from":"0x...", "to":"0x...", "data":"0x..."}}' \
      "http://localhost:8080/debug?block=73760000"
 ```
@@ -73,7 +85,8 @@ curl -X POST -H "Content-Type: application/json" \
 **Option B: Read from file**
 
 ```bash
-curl -X POST -H "Content-Type: application/json" \
+curl -X POST -u "admin:your_secure_password" \
+     -H "Content-Type: application/json" \
      -d @err.json \
      "http://localhost:8080/debug?block=73760000"
 ```

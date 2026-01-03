@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"tracer-backend/handler"
 
@@ -38,16 +39,34 @@ func main() {
 		c.Next()
 	})
 
+	// Basic Auth Middleware
+	user := os.Getenv("BASIC_AUTH_USER")
+	pass := os.Getenv("BASIC_AUTH_PASS")
+
+	if user == "" || pass == "" {
+		log.Fatal("BASIC_AUTH_USER and BASIC_AUTH_PASS environment variables must be set")
+	}
+
+	auth := gin.BasicAuth(gin.Accounts{
+		user: pass,
+	})
+
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"status": "ok",
+			"status":  "ok",
 			"service": "tracer-backend",
 		})
 	})
 
-	r.POST("/debug", handler.HandleDebug)
+	// Public routes (no auth required)
 	r.POST("/decode", handler.HandleDecode)
 	r.POST("/encode", handler.HandleEncode)
+
+	// Protect sensitive routes with Basic Auth
+	authorized := r.Group("/", auth)
+	{
+		authorized.POST("/debug", handler.HandleDebug)
+	}
 
 	fmt.Printf("Starting Debug Server on :%s...\n", *port)
 	if err := r.Run(":" + *port); err != nil {

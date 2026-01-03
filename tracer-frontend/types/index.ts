@@ -33,8 +33,9 @@ export interface DebugResponse {
 }
 
 export interface DebugPayload {
-  chain_type?: 'evm' | 'solana';
+  chain_type?: "evm" | "solana";
   rpc_url?: string;
+  chain_id?: number;
   tx_hash?: string;
   block?: string;
   data?: {

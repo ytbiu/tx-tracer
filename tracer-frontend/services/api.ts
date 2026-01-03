@@ -22,7 +22,7 @@ export const api = {
   },
 
   debug: async (payload: DebugPayload, block: string) => {
-    const res = await fetch(`${API_BASE_URL}/debug?block=${block}`, {
+    const res = await fetch(`/api/trace/debug?block=${block}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

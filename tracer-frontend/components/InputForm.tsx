@@ -3,8 +3,8 @@ import React from "react";
 interface InputFormProps {
   chainType: "evm" | "solana";
   setChainType: (val: "evm" | "solana") => void;
-  rpcUrl: string;
-  setRpcUrl: (val: string) => void;
+  chainId: number;
+  setChainId: (val: number) => void;
   block: string;
   setBlock: (val: string) => void;
   inputMode: "custom" | "hash";
@@ -28,8 +28,8 @@ interface InputFormProps {
 export const InputForm: React.FC<InputFormProps> = ({
   chainType,
   setChainType,
-  rpcUrl,
-  setRpcUrl,
+  chainId,
+  setChainId,
   block,
   setBlock,
   inputMode,
@@ -55,7 +55,10 @@ export const InputForm: React.FC<InputFormProps> = ({
 
       <div className="flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
         <button
-          onClick={() => setChainType("evm")}
+          onClick={() => {
+            setChainType("evm");
+            setChainId(56);
+          }}
           className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
             chainType === "evm"
               ? "bg-white dark:bg-gray-600 shadow-sm text-blue-600 dark:text-blue-300"
@@ -68,6 +71,7 @@ export const InputForm: React.FC<InputFormProps> = ({
           onClick={() => {
             setChainType("solana");
             setInputMode("hash"); // Force hash mode for Solana initially
+            setChainId(-1);
           }}
           className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
             chainType === "solana"
@@ -106,18 +110,22 @@ export const InputForm: React.FC<InputFormProps> = ({
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">RPC URL</label>
-          <input
-            type="text"
-            value={rpcUrl}
-            onChange={(e) => setRpcUrl(e.target.value)}
-            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-            placeholder={
-              chainType === "solana"
-                ? "https://api.mainnet-beta.solana.com"
-                : "Default (from server environment)"
-            }
-          />
+          <label className="block text-sm font-medium mb-1">Network</label>
+          <select
+            value={chainId}
+            onChange={(e) => setChainId(Number(e.target.value))}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none text-sm appearance-none"
+            disabled={chainType === "solana"}
+          >
+            {chainType === "evm" ? (
+              <>
+                <option value={56}>BNB Chain (BSC)</option>
+                {/* Add more chains here as needed */}
+              </>
+            ) : (
+              <option value={-1}>Solana Mainnet</option>
+            )}
+          </select>
         </div>
 
         {inputMode === "custom" && (

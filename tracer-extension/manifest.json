@@ -3,9 +3,7 @@
   "name": "Transaction Tracer Helper",
   "version": "1.0",
   "description": "Injects a Trace button into Etherscan and BscScan transaction pages",
-  "permissions": [
-    "activeTab"
-  ],
+  "permissions": ["activeTab"],
   "content_scripts": [
     {
       "matches": [

@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="512" height="512" rx="100" ry="100" fill="url(#grad1)" />
+  
+  <!-- Magnifying Glass Handle -->
+  <path d="M330 330 L400 400" stroke="#38bdf8" stroke-width="40" stroke-linecap="round" />
+  
+  <!-- Magnifying Glass Rim -->
+  <circle cx="220" cy="220" r="140" stroke="#38bdf8" stroke-width="30" fill="none" />
+  
+  <!-- Trace Line (Pulse) inside -->
+  <path d="M120 220 L170 220 L195 170 L245 270 L270 220 L320 220" 
+        stroke="#4ade80" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#glow)" />
+        
+  <!-- Dots for nodes -->
+  <circle cx="120" cy="220" r="10" fill="#4ade80" />
+  <circle cx="320" cy="220" r="10" fill="#4ade80" />
+
+</svg>

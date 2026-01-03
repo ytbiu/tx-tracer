@@ -16,7 +16,7 @@ import (
 
 func AnalyzeTrace(req types.RequestPayload) types.ResponsePayload {
 	// 1. Setup RPC
-	rpcURL := os.Getenv("RPC_URL")
+	rpcURL := os.Getenv("BSC_RPC_URL")
 	if req.RPCURL != "" {
 		rpcURL = req.RPCURL
 	}
