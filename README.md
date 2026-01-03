@@ -70,6 +70,7 @@ For more details, see [tracer-frontend/README.md](./tracer-frontend/README.md).
 - **Transaction Simulation**: Simulate arbitrary transactions with custom `from`, `to`, `data`, and `value` fields.
 - **Historical Debugging**: Replay and debug past transactions using their transaction hash.
 - **Trace Visualization**: Visualize the call stack and see exactly where and why a transaction reverted.
+- **Solana Support**: Basic support for Solana transaction tracing (currently supports analyzing existing transactions by hash).
 - **Error Analysis**: Automatically extracts revert reasons and decoded error data.
 - **ABI Tools**: Built-in utilities to encode and decode ABI parameters.
 

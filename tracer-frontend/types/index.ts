@@ -31,3 +31,16 @@ export interface DebugResponse {
   };
   message?: string;
 }
+
+export interface DebugPayload {
+  chain_type?: 'evm' | 'solana';
+  rpc_url?: string;
+  tx_hash?: string;
+  block?: string;
+  data?: {
+    from: string;
+    to: string;
+    data: string;
+    value: string | number;
+  };
+}

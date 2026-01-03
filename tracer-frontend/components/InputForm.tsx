@@ -1,6 +1,8 @@
 import React from "react";
 
 interface InputFormProps {
+  chainType: "evm" | "solana";
+  setChainType: (val: "evm" | "solana") => void;
   rpcUrl: string;
   setRpcUrl: (val: string) => void;
   block: string;
@@ -24,6 +26,8 @@ interface InputFormProps {
 }
 
 export const InputForm: React.FC<InputFormProps> = ({
+  chainType,
+  setChainType,
   rpcUrl,
   setRpcUrl,
   block,
@@ -49,17 +53,45 @@ export const InputForm: React.FC<InputFormProps> = ({
     <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 h-fit">
       <h2 className="text-xl font-semibold mb-4">Configuration</h2>
 
-      <div className="flex space-x-2 mb-6">
+      <div className="flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
         <button
-          onClick={() => setInputMode("custom")}
-          className={`flex-1 py-1.5 px-3 rounded text-sm font-medium transition-colors ${
-            inputMode === "custom"
-              ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
-              : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+          onClick={() => setChainType("evm")}
+          className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+            chainType === "evm"
+              ? "bg-white dark:bg-gray-600 shadow-sm text-blue-600 dark:text-blue-300"
+              : "text-gray-500 dark:text-gray-400 hover:text-gray-700"
           }`}
         >
-          Custom Simulation
+          EVM (Ethereum)
         </button>
+        <button
+          onClick={() => {
+            setChainType("solana");
+            setInputMode("hash"); // Force hash mode for Solana initially
+          }}
+          className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+            chainType === "solana"
+              ? "bg-white dark:bg-gray-600 shadow-sm text-purple-600 dark:text-purple-300"
+              : "text-gray-500 dark:text-gray-400 hover:text-gray-700"
+          }`}
+        >
+          Solana
+        </button>
+      </div>
+
+      <div className="flex space-x-2 mb-6">
+        {chainType === "evm" && (
+          <button
+            onClick={() => setInputMode("custom")}
+            className={`flex-1 py-1.5 px-3 rounded text-sm font-medium transition-colors ${
+              inputMode === "custom"
+                ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+                : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+            }`}
+          >
+            Custom Simulation
+          </button>
+        )}
         <button
           onClick={() => setInputMode("hash")}
           className={`flex-1 py-1.5 px-3 rounded text-sm font-medium transition-colors ${
@@ -80,7 +112,11 @@ export const InputForm: React.FC<InputFormProps> = ({
             value={rpcUrl}
             onChange={(e) => setRpcUrl(e.target.value)}
             className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-            placeholder="Default (from server environment)"
+            placeholder={
+              chainType === "solana"
+                ? "https://api.mainnet-beta.solana.com"
+                : "Default (from server environment)"
+            }
           />
         </div>
 
@@ -101,7 +137,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 
         <hr className="border-gray-200 dark:border-gray-700" />
 
-        {inputMode === "custom" ? (
+        {inputMode === "custom" && chainType === "evm" ? (
           <>
             <div>
               <label className="block text-sm font-medium mb-1">From</label>
@@ -173,7 +209,9 @@ export const InputForm: React.FC<InputFormProps> = ({
               value={txHash}
               onChange={(e) => setTxHash(e.target.value)}
               className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none text-sm font-mono"
-              placeholder="0x..."
+              placeholder={
+                chainType === "solana" ? "Base58 Signature..." : "0x..."
+              }
             />
           </div>
         )}

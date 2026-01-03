@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"tracer-backend/service/abi"
+	"tracer-backend/service/solana"
 	"tracer-backend/service/trace"
 	"tracer-backend/types"
 	"tracer-backend/utils"
@@ -24,7 +25,13 @@ func HandleDebug(c *gin.Context) {
 		req.Block = queryBlock
 	}
 
-	resp := trace.AnalyzeTrace(req)
+	var resp types.ResponsePayload
+	if req.ChainType == "solana" {
+		resp = solana.AnalyzeTrace(req)
+	} else {
+		resp = trace.AnalyzeTrace(req)
+	}
+
 	c.JSON(http.StatusOK, resp)
 }
 

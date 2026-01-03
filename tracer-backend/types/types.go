@@ -2,8 +2,9 @@ package types
 
 // RequestPayload matches the input JSON structure
 type RequestPayload struct {
-	RPCURL string `json:"rpc_url,omitempty"`
-	TxHash string `json:"tx_hash,omitempty"` // Optional: Trace existing tx
+	ChainType string `json:"chain_type,omitempty"` // "evm" or "solana" (default "evm")
+	RPCURL    string `json:"rpc_url,omitempty"`
+	TxHash    string `json:"tx_hash,omitempty"` // Optional: Trace existing tx
 	Block  string `json:"block,omitempty"`   // "latest" or hex block number
 	Data   struct {
 		From  string      `json:"from"`

@@ -5,14 +5,15 @@ import { Header } from "../components/Header";
 import { InputForm } from "../components/InputForm";
 import { ABITool } from "../components/ABITool";
 import { TraceResult } from "../components/TraceResult";
-import { api, DebugPayload } from "../services/api";
-import { DebugResponse, DecodedModel } from "../types";
+import { api } from "../services/api";
+import { DebugResponse, DecodedModel, DebugPayload } from "../types";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<DebugResponse | null>(null);
 
   // Form State
+  const [chainType, setChainType] = useState<"evm" | "solana">("evm");
   const [rpcUrl, setRpcUrl] = useState("");
   const [block, setBlock] = useState("latest");
   const [txFrom, setTxFrom] = useState("");
@@ -92,6 +93,7 @@ export default function Home() {
 
     try {
       const payload: DebugPayload = {
+        chain_type: chainType,
         rpc_url: rpcUrl,
       };
 
@@ -129,6 +131,8 @@ export default function Home() {
           {/* Left Column: Input Form & Tools */}
           <div className="lg:col-span-1 space-y-6">
             <InputForm
+              chainType={chainType}
+              setChainType={setChainType}
               rpcUrl={rpcUrl}
               setRpcUrl={setRpcUrl}
               block={block}

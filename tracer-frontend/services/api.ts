@@ -1,16 +1,6 @@
-const API_BASE_URL = "http://localhost:8080";
+import { DebugPayload } from "../types";
 
-export interface DebugPayload {
-  rpc_url: string;
-  tx_hash?: string;
-  data?: {
-    from: string;
-    to: string;
-    data: string;
-    value: string;
-  };
-  block?: string;
-}
+const API_BASE_URL = "http://localhost:8080";
 
 export const api = {
   decode: async (input: string) => {
