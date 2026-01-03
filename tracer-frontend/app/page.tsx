@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { Header } from "../components/Header";
@@ -10,7 +10,7 @@ import { TraceResult } from "../components/TraceResult";
 import { api } from "../services/api";
 import { DebugResponse, DecodedModel, DebugPayload } from "../types";
 
-export default function Home() {
+function TraceContent() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   // Removed invite code auth logic
@@ -419,5 +419,19 @@ export default function Home() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
+      <TraceContent />
+    </Suspense>
   );
 }
