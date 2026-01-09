@@ -5,8 +5,8 @@ type RequestPayload struct {
 	ChainType string `json:"chain_type,omitempty"` // "evm" or "solana" (default "evm")
 	RPCURL    string `json:"rpc_url,omitempty"`
 	TxHash    string `json:"tx_hash,omitempty"` // Optional: Trace existing tx
-	Block  string `json:"block,omitempty"`   // "latest" or hex block number
-	Data   struct {
+	Block     string `json:"block,omitempty"`   // "latest" or hex block number
+	Data      struct {
 		From  string      `json:"from"`
 		To    string      `json:"to"`
 		Data  string      `json:"data"`

@@ -6,9 +6,9 @@ import (
 	"math/big"
 	"strings"
 
-	"tracer-backend/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"tracer-backend/types"
 )
 
 // Common ERC20/ERC721 selectors
@@ -54,19 +54,19 @@ func TryDecodeInput(input string) (string, *types.DecodedModel) {
 				if err == nil {
 					var sb strings.Builder
 					var params []types.ParamModel
-					
+
 					sb.WriteString(fmt.Sprintf("  Function: %s\n", method.Name))
 					for i, arg := range args {
 						valStr := fmt.Sprintf("%v", arg)
 						sb.WriteString(fmt.Sprintf("  %s (%s): %s\n", method.Inputs[i].Name, method.Inputs[i].Type, valStr))
-						
+
 						params = append(params, types.ParamModel{
 							Name:  method.Inputs[i].Name,
 							Type:  method.Inputs[i].Type.String(),
 							Value: valStr,
 						})
 					}
-					
+
 					model := &types.DecodedModel{
 						Name:   method.Name,
 						Params: params,
@@ -82,21 +82,21 @@ func TryDecodeInput(input string) (string, *types.DecodedModel) {
 	if info, ok := commonSelectors[selector]; ok {
 		var sb strings.Builder
 		var params []types.ParamModel
-		
+
 		sb.WriteString(fmt.Sprintf("  Function: %s\n", info.Name))
-		
+
 		// Decode params
 		offset := 0
 		for i, paramType := range info.Params {
 			var val string
-			
+
 			if offset+64 > len(dataHex) {
 				sb.WriteString(fmt.Sprintf("  Param[%d] (%s): <insufficient data>\n", i, paramType))
 				val = "<insufficient data>"
 			} else {
 				chunk := dataHex[offset : offset+64]
 				offset += 64
-				
+
 				if paramType == "address" {
 					// Address is last 40 chars of the 64 char chunk
 					val = "0x" + chunk[24:]
@@ -109,21 +109,21 @@ func TryDecodeInput(input string) (string, *types.DecodedModel) {
 				}
 				sb.WriteString(fmt.Sprintf("  Param[%d] (%s): %s\n", i, paramType, val))
 			}
-			
+
 			params = append(params, types.ParamModel{
 				Name:  fmt.Sprintf("param%d", i),
 				Type:  paramType,
 				Value: val,
 			})
 		}
-		
+
 		model := &types.DecodedModel{
 			Name:   info.Name,
 			Params: params,
 		}
 		return sb.String(), model
 	}
-	
+
 	// Fallback: chunk data (no model)
 	var sb strings.Builder
 	sb.WriteString(fmt.Sprintf("  Selector: 0x%s\n", selector))

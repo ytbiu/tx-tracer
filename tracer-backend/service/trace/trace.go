@@ -78,10 +78,10 @@ func AnalyzeTrace(req types.RequestPayload) types.ResponsePayload {
 
 	// 5. Analyze Errors
 	response := types.ResponsePayload{Success: true}
-	
+
 	// Build Error Trace
 	response.FullTrace = buildFullTrace(&root, 0)
-	
+
 	// Find Deepest Error
 	deepest := findDeepestRevert(&root)
 	if deepest != nil {
@@ -92,18 +92,18 @@ func AnalyzeTrace(req types.RequestPayload) types.ResponsePayload {
 			Reason:   deepest.RevertReason,
 			InputRaw: deepest.Input, // Return full input
 		}
-		
+
 		// Decode Input
 		decoded, model := abi.TryDecodeInput(deepest.Input)
 		if decoded != "" {
 			errInfo.InputDecoded = decoded
 			errInfo.DecodedModel = model
 		}
-		
+
 		if deepest.RevertReason == "BNE" {
 			errInfo.Tip = "'BNE' typically stands for 'Balance Not Enough'. Check token balance."
 		}
-		
+
 		response.DeepestError = errInfo
 	} else {
 		response.Message = "No revert error found in the trace."
@@ -114,10 +114,10 @@ func AnalyzeTrace(req types.RequestPayload) types.ResponsePayload {
 
 func buildFullTrace(frame *types.TraceFrame, depth int) []types.TraceItem {
 	var traces []types.TraceItem
-	
+
 	indent := strings.Repeat("  ", depth)
 	hasError := frame.Error != "" || frame.RevertReason != ""
-	
+
 	status := "SUCCESS"
 	if hasError {
 		status = fmt.Sprintf("FAILED (%s)", frame.Error)
@@ -125,7 +125,7 @@ func buildFullTrace(frame *types.TraceFrame, depth int) []types.TraceItem {
 			status += fmt.Sprintf(" Reason: %s", frame.RevertReason)
 		}
 	}
-	
+
 	// Decode function name for summary
 	funcName := "fallback"
 	if len(frame.Input) >= 10 {
@@ -136,9 +136,9 @@ func buildFullTrace(frame *types.TraceFrame, depth int) []types.TraceItem {
 			funcName = selector
 		}
 	}
-	
+
 	line := fmt.Sprintf("%s-> %s [%s] %s", indent, frame.To, funcName, status)
-	
+
 	item := types.TraceItem{
 		Log:     line,
 		IsError: hasError,
@@ -151,13 +151,13 @@ func buildFullTrace(frame *types.TraceFrame, depth int) []types.TraceItem {
 			item.Decoded = model
 		}
 	}
-	
+
 	traces = append(traces, item)
-	
+
 	for _, child := range frame.Calls {
 		traces = append(traces, buildFullTrace(child, depth+1)...)
 	}
-	
+
 	return traces
 }
 

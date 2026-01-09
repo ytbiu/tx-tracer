@@ -34,7 +34,7 @@ func SanitizeNumber(s string) string {
 		// If not a number, treat as hex
 		s = "0x" + s
 	}
-	
+
 	hexPart := strings.TrimPrefix(s, "0x")
 	if len(hexPart)%2 != 0 {
 		return "0x0" + hexPart
@@ -49,7 +49,7 @@ func SanitizeBytes(s string) string {
 	if !strings.HasPrefix(s, "0x") {
 		s = "0x" + s
 	}
-	
+
 	hexPart := strings.TrimPrefix(s, "0x")
 	if len(hexPart)%2 != 0 {
 		// Append 0 to preserve the start (selector)

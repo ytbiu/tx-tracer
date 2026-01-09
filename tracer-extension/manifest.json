@@ -12,7 +12,10 @@
         "*://bscscan.com/tx/*",
         "*://*.bscscan.com/tx/*",
         "*://solscan.io/tx/*",
-        "*://*.solscan.io/tx/*"
+        "*://*.solscan.io/tx/*",
+        "*://basescan.org/tx/*",
+        "*://*.basescan.org/tx/*",
+        "*://explorer.solana.com/tx/*"
       ],
       "js": ["content.js"],
       "run_at": "document_end"

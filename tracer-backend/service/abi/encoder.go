@@ -21,7 +21,7 @@ func EncodeABI(signature string, args []string) (string, error) {
 	}
 	name := parts[0]
 	paramsStr := strings.TrimSuffix(parts[1], ")")
-	
+
 	var paramTypes []string
 	if paramsStr != "" {
 		paramTypes = strings.Split(paramsStr, ",")
